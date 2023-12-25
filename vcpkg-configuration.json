@@ -6,7 +6,7 @@
   "registries": [
     {
       "kind": "git",
-      "repository": "https://github.com/equeim/vcpkg-registry.git",
+      "repository": "https://github.com/pruna00/vcpkg-registry.git",
       "baseline": "68f239993f8b9ec552e4439fb71c2c48b0b2f71f",
       "packages": [
         "qt5-tools"
