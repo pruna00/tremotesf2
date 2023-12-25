@@ -4,4 +4,5 @@
 
 [submodule "src/libtremotesf"]
 	path = src/libtremotesf
-	url = https://github.com/equeim/libtremotesf.git
+	url = https://github.com/pruna00/libtremotesf.git
+	branch = 2.4.0
