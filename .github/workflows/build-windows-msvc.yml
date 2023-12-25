@@ -34,7 +34,7 @@ jobs:
         echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" >> '${{ github.env }}'
 
     - name: Set up vcpkg
-      uses: equeim/action-setup-vcpkg@v6
+      uses: equeim/action-setup-vcpkg@v5
       with:
         run-install: true
         install-root: C:\vcpkg_installed
@@ -48,7 +48,7 @@ jobs:
 
     - name: Build Tremotesf
       id: build
-      uses: equeim/action-cmake-build@v10
+      uses: equeim/action-cmake-build@v9
       with:
         cmake-arguments: --preset ${{ inputs.toolchain }} -D VCPKG_MANIFEST_INSTALL=OFF -D VCPKG_INSTALLED_DIR=C:\vcpkg_installed
         package: true
