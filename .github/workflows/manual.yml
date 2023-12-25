@@ -1,0 +1,96 @@
+name: Build DEB
+
+on:
+  workflow_dispatch:
+    inputs:
+      tool:
+        description: 'Build with'
+        required: true
+        default: 'cmake'
+        type: choice
+        options:
+          - cmake
+          - buildpackage
+
+jobs:
+  cmake:
+    if:  ${{ inputs.tool == 'cmake' }}
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/devcontainers/cpp:debian-12
+
+    steps:
+    - name: Install dependencies
+      run: |
+        apt-get update && DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends --assume-yes install gettext libcxxopts-dev libfmt-dev libkf5widgetsaddons-dev libkf5windowsystem-dev libpsl-dev libssl-dev ninja-build pkgconf qtbase5-dev qttools5-dev
+
+    - name: Check out sources
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    - name: Build package
+      run: |
+        cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --config Release
+        cmake --install build --config Release --prefix bin --strip
+
+    - name: Archive packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: tremotesf2-bin
+        retention-days: ${{ github.event_name == 'push' && github.retention_days || 3 }}
+        path: bin/*
+
+  buildpackage:
+    if:  ${{ inputs.tool == 'buildpackage' }}
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/devcontainers/cpp:debian-12
+
+    steps:
+    - name: Add GCC problem matcher
+      uses: ammaraskar/gcc-problem-matcher@master
+
+    - name: Install dependencies needed to make source archive
+      run: |
+        apt-get update && DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends --assume-yes install ca-certificates git python3 cmake
+
+    - name: Check out sources
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    - name: Make source archive
+      run: |
+        # Git complains if we don't do that
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        .github/workflows/make-source-archive.py --output-directory .. --debian gzip
+
+    - name: Check out Debian sources
+      uses: actions/checkout@v4
+      with:
+        repository: equeim/tremotesf-debian
+        path: tremotesf-debian
+
+    - name: Remove everything except debian/ directory
+      run: |
+        mv tremotesf-debian/debian debian
+        rm -rf tremotesf-debian
+
+    - name: Install build dependencies
+      run: |
+        apt-get update && DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends --assume-yes build-dep .
+
+    - name: Build DEB
+      run: |
+        dpkg-buildpackage
+
+    - name: Archive packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-msvc-packages
+        retention-days: ${{ github.event_name == 'push' && github.retention_days || 3 }}
+        path: |
+          ../tremotesf_*.deb
+
