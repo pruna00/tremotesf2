@@ -8,6 +8,7 @@
 
 #include <QCoreApplication>
 #include <QDataStream>
+#include <QDir>
 #include <QMetaEnum>
 #include <QSettings>
 
@@ -196,7 +197,10 @@ namespace tremotesf {
     )
 
     Settings::Settings(QObject* parent) : QObject(parent) {
-        if constexpr (isTargetOsWindows) {
+        QDir settingsDir = QDir(QCoreApplication::applicationDirPath() + "/settings");
+        if (settingsDir.exists()) {
+            mSettings = new QSettings(settingsDir.filePath("tremotesf.ini"), QSettings::IniFormat, this);
+        } else if constexpr (isTargetOsWindows) {
             mSettings = new QSettings(
                 QSettings::IniFormat,
                 QSettings::UserScope,
