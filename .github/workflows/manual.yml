@@ -86,11 +86,15 @@ jobs:
       run: |
         dpkg-buildpackage
 
+    - name: Workaround for actions/upload-artifact issue #176
+      run: |
+        echo "artifacts_path=$(realpath ..)" >> $GITHUB_ENV
+
     - name: Archive packages
       uses: actions/upload-artifact@v4
       with:
         name: windows-msvc-packages
         retention-days: ${{ github.event_name == 'push' && github.retention_days || 3 }}
         path: |
-          ../tremotesf_*.deb
+          ${{ env.artifacts_path }}//tremotesf_*.deb
 
