@@ -65,13 +65,11 @@ namespace tremotesf {
             case Column::Name:
                 return torrent->data().name;
             case Column::SizeWhenDone:
-                return Utils::formatByteSize(torrent->data().sizeWhenDone);
                 {
                     QString sizeWhenDone = Utils::formatByteSize(torrent->data().sizeWhenDone);
                     return sizeWhenDone == "0 B" ? "" : sizeWhenDone;
                 }
             case Column::TotalSize:
-                return Utils::formatByteSize(torrent->data().totalSize);
                 {
                     QString totalSize = Utils::formatByteSize(torrent->data().totalSize);
                     return totalSize == "0 B" ? "" : totalSize;
