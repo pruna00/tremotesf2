@@ -62,9 +62,15 @@ namespace tremotesf {
             case Column::Name:
                 return torrent->data().name;
             case Column::SizeWhenDone:
-                return formatutils::formatByteSize(torrent->data().sizeWhenDone);
+                {
+                    QString sizeWhenDone = formatutils::formatByteSize(torrent->data().sizeWhenDone);
+                    return sizeWhenDone == "0 B" ? "" : sizeWhenDone;
+                }
             case Column::TotalSize:
-                return formatutils::formatByteSize(torrent->data().totalSize);
+                {
+                    QString totalSize = formatutils::formatByteSize(torrent->data().totalSize);
+                    return totalSize == "0 B" ? "" : totalSize;
+                }
             case Column::ProgressBar:
             case Column::Progress:
                 if (torrent->data().status == TorrentData::Status::Checking) {
@@ -136,17 +142,35 @@ namespace tremotesf {
             case Column::QueuePosition:
                 return torrent->data().queuePosition;
             case Column::Seeders:
-                return torrent->data().totalSeedersFromTrackersCount;
+                {
+                    int totalSeedersFromTrackersCount = torrent->data().totalSeedersFromTrackersCount;
+                    return totalSeedersFromTrackersCount == 0 ? "" : QString::number(totalSeedersFromTrackersCount);
+                }
             case Column::Leechers:
-                return torrent->data().totalLeechersFromTrackersCount;
+                {
+                    int totalLeechersFromTrackersCount = torrent->data().totalLeechersFromTrackersCount;
+                    return totalLeechersFromTrackersCount == 0 ? "" : QString::number(totalLeechersFromTrackersCount);
+                }
             case Column::PeersSendingToUs:
-                return torrent->data().peersSendingToUsCount;
+                {
+                    int peersSendingToUsCount = torrent->data().peersSendingToUsCount;
+                    return peersSendingToUsCount == 0 ? "" : QString::number(peersSendingToUsCount);
+                }
             case Column::PeersGettingFromUs:
-                return torrent->data().peersGettingFromUsCount;
+                {
+                    int peersGettingFromUsCount = torrent->data().peersGettingFromUsCount;
+                    return peersGettingFromUsCount == 0 ? "" : QString::number(peersGettingFromUsCount);
+                }
             case Column::DownloadSpeed:
-                return formatutils::formatByteSpeed(torrent->data().downloadSpeed);
+                {
+                    QString downloadSpeed = formatutils::formatByteSpeed(torrent->data().downloadSpeed);
+                    return downloadSpeed == "0 B/s" ? "" : downloadSpeed;
+                }
             case Column::UploadSpeed:
-                return formatutils::formatByteSpeed(torrent->data().uploadSpeed);
+                {
+                    QString uploadSpeed = formatutils::formatByteSpeed(torrent->data().uploadSpeed);
+                    return uploadSpeed == "0 B/s" ? "" : uploadSpeed;
+                }
             case Column::Eta:
                 return formatutils::formatEta(torrent->data().eta);
             case Column::Ratio:
@@ -166,15 +190,27 @@ namespace tremotesf {
                 }
                 break;
             case Column::TotalDownloaded:
-                return formatutils::formatByteSize(torrent->data().totalDownloaded);
+                {
+                    QString totalDownloaded = formatutils::formatByteSize(torrent->data().totalDownloaded);
+                    return totalDownloaded == "0 B" ? "" : totalDownloaded;
+                }
             case Column::TotalUploaded:
-                return formatutils::formatByteSize(torrent->data().totalUploaded);
+                {
+                    QString totalUploaded = formatutils::formatByteSize(torrent->data().totalUploaded);
+                    return totalUploaded == "0 B" ? "" : totalUploaded;
+                }
             case Column::LeftUntilDone:
-                return formatutils::formatByteSize(torrent->data().leftUntilDone);
+                {
+                    QString leftUntilDone = formatutils::formatByteSize(torrent->data().leftUntilDone);
+                    return leftUntilDone == "0 B" ? "" : leftUntilDone;
+                }
             case Column::DownloadDirectory:
                 return torrent->data().downloadDirectory;
             case Column::CompletedSize:
-                return formatutils::formatByteSize(torrent->data().completedSize);
+                {
+                    QString completedSize = formatutils::formatByteSize(torrent->data().completedSize);
+                    return completedSize == "0 B" ? "" : completedSize;
+                }
             case Column::ActivityDate:
                 return torrent->data().activityDate.toLocalTime();
             default:
