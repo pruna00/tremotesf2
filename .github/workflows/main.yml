@@ -5,14 +5,15 @@
 name: CI
 
 on:
-  push:
-    branches: [master]
-  pull_request:
-    branches:
-      - master
-      - 'feature/**'
-  schedule:
-    - cron: '0 0 * * 0'
+  workflow_dispatch:
+  # push:
+  #   branches: [master]
+  # pull_request:
+  #   branches:
+  #     - master
+  #     - 'feature/**'
+  # schedule:
+  #   - cron: '0 0 * * 0'
 
 jobs:
   build-rpm:
