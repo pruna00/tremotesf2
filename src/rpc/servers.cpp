@@ -5,6 +5,7 @@
 #include "servers.h"
 
 #include <QCoreApplication>
+#include <QDir>
 #include <QSettings>
 #include <QStringBuilder>
 
@@ -411,8 +412,13 @@ namespace tremotesf {
     }
 
     Servers::Servers(QObject* parent)
-        : QObject(parent),
-          mSettings(new QSettings(settingsFormat, QSettings::UserScope, qApp->organizationName(), fileName, this)) {
+        : QObject(parent) {
+        QDir settingsDir = QDir(QCoreApplication::applicationDirPath() + "/settings");
+        if (settingsDir.exists()) {
+            mSettings = new QSettings(settingsDir.filePath("servers.ini"), QSettings::IniFormat, this);
+        } else {
+            mSettings = new QSettings(settingsFormat, QSettings::UserScope, qApp->organizationName(), fileName, this);
+        }
         mSettings->setFallbacksEnabled(false);
         if (hasServers()) {
             bool setFirst = true;
