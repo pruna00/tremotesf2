@@ -209,7 +209,7 @@ namespace tremotesf {
         QDir settingsDir = QDir(QCoreApplication::applicationDirPath() + "/settings");
         if (settingsDir.exists()) {
             mSettings = new QSettings(settingsDir.filePath("tremotesf.ini"), QSettings::IniFormat, this);
-        } else if constexpr (isTargetOsWindows) {
+        } else if constexpr (targetOs == TargetOs::Windows) {
             mSettings = new QSettings(
                 QSettings::IniFormat,
                 QSettings::UserScope,
