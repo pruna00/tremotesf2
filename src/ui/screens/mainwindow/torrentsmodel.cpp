@@ -230,6 +230,29 @@ namespace tremotesf {
                 break;
             }
             break;
+        case Qt::TextAlignmentRole:
+            switch (static_cast<Column>(index.column())) {
+            case Column::SizeWhenDone:
+            case Column::Eta:
+            case Column::TotalSize:
+            case Column::Progress:
+            case Column::QueuePosition:
+            case Column::Seeders:
+            case Column::Leechers:
+            case Column::PeersSendingToUs:
+            case Column::PeersGettingFromUs:
+            case Column::DownloadSpeed:
+            case Column::UploadSpeed:
+            case Column::Ratio:
+            case Column::DownloadSpeedLimit:
+            case Column::UploadSpeedLimit:
+            case Column::TotalDownloaded:
+            case Column::TotalUploaded:
+            case Column::LeftUntilDone:
+            case Column::CompletedSize:
+                return static_cast<Qt::Alignment::Int>(Qt::AlignRight | Qt::AlignVCenter);
+            }
+            break;
         case static_cast<int>(Role::Sort):
             switch (static_cast<Column>(index.column())) {
             case Column::SizeWhenDone:
