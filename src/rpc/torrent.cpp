@@ -395,8 +395,12 @@ namespace tremotesf {
                     }
                     newTrackers.push_back(std::move(*found));
                 }
-                newTotalSeeders += newTrackers.back().seeders();
-                newTotalLeechers += newTrackers.back().leechers();
+                if (newTotalSeeders < newTrackers.back().seeders()) {
+                    newTotalSeeders = newTrackers.back().seeders();
+                }
+                if (newTotalLeechers < newTrackers.back().leechers()) {
+                    newTotalLeechers = newTrackers.back().leechers();
+                }
             }
             trackers = std::move(newTrackers);
             setChanged(totalSeedersFromTrackersCount, newTotalSeeders, changed);
